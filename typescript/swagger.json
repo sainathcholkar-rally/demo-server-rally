@@ -1,0 +1,294 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "beta",
+    "title" : "",
+    "contact" : {
+      "name" : ""
+    },
+    "license" : {
+      "name" : "",
+      "url" : "http://licenseUrl"
+    }
+  },
+  "host" : "localhost:9000",
+  "basePath" : "/",
+  "tags" : [ {
+    "name" : "Benefit"
+  }, {
+    "name" : "Program"
+  } ],
+  "paths" : {
+    "/benefitsPrograms/v1/benefits/{rallyId}" : {
+      "get" : {
+        "tags" : [ "Benefit" ],
+        "summary" : "Get all benefits for a user",
+        "description" : "",
+        "operationId" : "getAllBenefits",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "rallyId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned benefits",
+            "schema" : {
+              "$ref" : "#/definitions/UserBenefitsResponse"
+            }
+          },
+          "500" : {
+            "description" : "Internal system error"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Benefit" ],
+        "summary" : "Register user for a medical plan",
+        "description" : "",
+        "operationId" : "invokePlanPickup",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "rallyId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "JSON body describing benefit",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/UserRegistrationRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ActionAnyContent"
+            }
+          },
+          "204" : {
+            "description" : "Successfully created plan"
+          },
+          "500" : {
+            "description" : "Internal system error"
+          }
+        }
+      }
+    },
+    "/benefitsPrograms/v1/ccfBenefits/{rallyId}" : {
+      "get" : {
+        "tags" : [ "Benefit" ],
+        "summary" : "Get ccf benefits for a user",
+        "description" : "",
+        "operationId" : "getCcfenefits",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "rallyId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned ccf benefits",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/CcfBenefitModel"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal system error"
+          }
+        }
+      }
+    },
+    "/benefitsPrograms/v1/programs/{rallyId}" : {
+      "get" : {
+        "tags" : [ "Program" ],
+        "summary" : "Get all programs for a user",
+        "description" : "",
+        "operationId" : "getAllPrograms",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "rallyId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned programs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Program"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal system error"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Action" : {
+      "type" : "object"
+    },
+    "ActionAnyContent" : {
+      "type" : "object"
+    },
+    "BenefitModel" : {
+      "type" : "object",
+      "required" : [ "coverageType", "lastUpdated", "status" ],
+      "properties" : {
+        "coverageType" : {
+          "type" : "string"
+        },
+        "carrierName" : {
+          "type" : "string"
+        },
+        "benefitName" : {
+          "type" : "string"
+        },
+        "groupNumber" : {
+          "type" : "string"
+        },
+        "isUHC" : {
+          "type" : "object"
+        },
+        "memberId" : {
+          "type" : "string"
+        },
+        "networkId" : {
+          "type" : "string"
+        },
+        "status" : {
+          "type" : "string"
+        },
+        "effectiveDate" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "terminationDate" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "lastUpdated" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "guestUrl" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Demographics" : {
+      "type" : "object",
+      "required" : [ "dob", "firstName", "lastName" ],
+      "properties" : {
+        "firstName" : {
+          "type" : "string"
+        },
+        "lastName" : {
+          "type" : "string"
+        },
+        "dob" : {
+          "type" : "string"
+        }
+      }
+    },
+    "UserBenefitsResponse" : {
+      "type" : "object",
+      "required" : [ "benefits" ],
+      "properties" : {
+        "benefits" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/BenefitModel"
+          }
+        },
+        "demographics" : {
+          "$ref" : "#/definitions/Demographics"
+        }
+      }
+    },
+    "CcfBenefitModel" : {
+      "type" : "object",
+      "required" : [ "benefitId", "name" ],
+      "properties" : {
+        "benefitId" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "UserRegistrationRequest" : {
+      "type" : "object",
+      "required" : [ "internalPlanId" ],
+      "properties" : {
+        "internalPlanId" : {
+          "type" : "string"
+        },
+        "firstName" : {
+          "type" : "string"
+        },
+        "lastName" : {
+          "type" : "string"
+        },
+        "dob" : {
+          "type" : "string"
+        },
+        "memberId" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Program" : {
+      "type" : "object",
+      "required" : [ "displayName", "hasMilestones", "hydraId", "isComplete", "name", "syllabusId" ],
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "displayName" : {
+          "type" : "string"
+        },
+        "syllabusId" : {
+          "type" : "string"
+        },
+        "hydraId" : {
+          "type" : "string"
+        },
+        "enrolledDate" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "hasMilestones" : {
+          "type" : "boolean"
+        },
+        "isComplete" : {
+          "type" : "boolean"
+        },
+        "lastActivity" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    }
+  }
+}
